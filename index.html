@@ -3,95 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smooch Bank 💋</title>
+    <title>SMOOCH BANK 💋</title>
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background: #fff0f3; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .bank-vault { background: white; padding: 25px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; text-align: center; }
-        .user-card { margin: 15px 0; padding: 15px; border-radius: 20px; border: 2px solid #eee; }
-        .bal { font-size: 2.5rem; font-weight: bold; display: block; margin: 5px 0; }
-        button { border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; color: white; margin-top: 5px; }
-        .btn-baby { background: #ff85a2; }
-        .btn-daddy { background: #4dabf7; }
-        #status { font-size: 0.7rem; color: #aaa; margin-top: 10px; }
+        :root { --baby: #ff85a2; --daddy: #4dabf7; --green: #40c057; }
+        body { font-family: 'Poppins', sans-serif; background: #fff5f7; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; width: 100%; max-width: 400px; padding: 25px; border-radius: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; }
+        .balance-box { border: 2px solid #eee; border-radius: 20px; padding: 15px; margin-bottom: 15px; }
+        .amount { font-size: 2.2rem; font-weight: 700; color: #333; display: block; }
+        .bill-section { background: #f8f9fa; padding: 15px; border-radius: 20px; margin-top: 20px; }
+        .bill-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .bill-item { font-size: 1.5rem; cursor: pointer; background: white; padding: 10px; border-radius: 12px; border: 1px solid #ddd; transition: 0.2s; }
+        .bill-item:active { transform: scale(0.9); }
+        button { border: none; color: white; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-baby { background: var(--baby); }
+        .btn-daddy { background: var(--daddy); }
+        #status { font-size: 0.7rem; color: #aaa; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div id="auth-screen">
-    <button onclick="handleLogin()" style="background:#ff4d94; width: auto; padding: 15px 30px;">Open Our Vault 🔐</button>
-</div>
+<div id="auth" style="margin-top: 100px;"><button onclick="unlock()" style="background:#ff4d94;">Open SMOOCH BANK 🔐</button></div>
 
-<div id="main-app" class="bank-vault" style="display:none;">
-    <h2 style="color:#ff4d94; margin:0;">SMOOCH BANK 💋</h2>
-    <p style="font-size:0.7rem; color:#40c057; font-weight:bold;">Interest: 0.11% Daily</p>
+<div id="app" class="container" style="display:none;">
+    <h2 style="color:#ff4d94; margin-bottom:0;">SMOOCH BANK 💋</h2>
+    <p style="font-size:0.7rem; color:var(--green); font-weight:bold;">Interest Rate: 0.11% Daily</p>
 
-    <div class="user-card" style="border-color:#ff85a2;">
-        <div style="color:#ff85a2; font-weight:bold;">Baby's Savings</div>
-        <span class="bal" id="bal-baby">0.00</span>
-        <button class="btn-baby" onclick="doDeposit('Baby')">Deposit 💋</button>
+    <!-- Balances -->
+    <div class="balance-box" style="border-color: var(--baby);">
+        <span style="color:var(--baby); font-weight:bold;">Baby's Balance</span>
+        <span id="bal-baby" class="amount">0.00</span>
+        <button class="btn-baby" onclick="transact('Baby', 'deposit')">Deposit Kiss 💋</button>
     </div>
 
-    <div class="user-card" style="border-color:#4dabf7;">
-        <div style="color:#4dabf7; font-weight:bold;">Daddy's Savings</div>
-        <span class="bal" id="bal-daddy">0.00</span>
-        <button class="btn-daddy" onclick="doDeposit('Daddy')">Deposit 💋</button>
+    <div class="balance-box" style="border-color: var(--daddy);">
+        <span style="color:var(--daddy); font-weight:bold;">Daddy's Balance</span>
+        <span id="bal-daddy" class="amount">0.00</span>
+        <button class="btn-daddy" onclick="transact('Daddy', 'deposit')">Deposit Kiss 💋</button>
     </div>
 
-    <div id="status">Ready...</div>
+    <!-- Daily Bills -->
+    <div class="bill-section">
+        <strong style="font-size:0.8rem;">Daily Bills (Pay with 1 💋)</strong>
+        <p style="font-size:0.6rem; color:#666;">Choose for: <span id="target">Baby</span></p>
+        <div style="margin-bottom:10px;">
+            <small onclick="setTarget('Baby')" style="cursor:pointer; color:var(--baby)">[For Baby]</small>
+            <small onclick="setTarget('Daddy')" style="cursor:pointer; color:var(--daddy)">[For Daddy]</small>
+        </div>
+        <div class="bill-grid">
+            <div class="bill-item" onclick="transact(targetUser, 'pay')">🍵</div>
+            <div class="bill-item" onclick="transact(targetUser, 'pay')">☕</div>
+            <div class="bill-item" onclick="transact(targetUser, 'pay')">🫂</div>
+            <div class="bill-item" onclick="transact(targetUser, 'pay')">🍫</div>
+            <div class="bill-item" onclick="transact(targetUser, 'pay')">🥒</div>
+            <div class="bill-item" onclick="transact(targetUser, 'pay')">🍆</div>
+            <div class="bill-item" onclick="transact(targetUser, 'pay')">🍑</div>
+        </div>
+    </div>
+
+    <div id="status">Secure connection active...</div>
 </div>
+
+<audio id="soundKiss"><source src="https://kiss.wav"></audio>
+<audio id="soundPay"><source src="https://bell.wav"></audio>
 
 <script>
-    // --- KONFIGURASI ---
-    const API_URL = "https://script.google.com/macros/s/AKfycbw50RkxBCJ5PTk2DBZX4wI6D76hzsnSEJeUxLh0nwk9C0thjOw2bnxUVW28SRm87rU/exec"; 
-    const MY_PIN = "0211";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwEiOrfNgKVRun895FhC7-Q0z4yqwzDB8FFN2bIegTdp0npG0sAYcA2VT9ghkJyvceh/exec";
+    let targetUser = "Baby";
 
-    function handleLogin() {
-        const input = prompt("Enter Vault PIN:");
-        if (input === MY_PIN) {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            startSync();
-        } else {
-            alert("Access Denied!");
+    function unlock() {
+        if(prompt("Vault PIN:") === "0211") {
+            document.getElementById('auth').style.display='none';
+            document.getElementById('app').style.display='block';
+            sync(); setInterval(sync, 5000);
         }
     }
 
-    async function startSync() {
-        await refreshData();
-        setInterval(refreshData, 5000);
-    }
+    function setTarget(user) { targetUser = user; document.getElementById('target').innerText = user; }
 
-    async function refreshData() {
+    async function sync() {
         try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            
-            // Mengambil nilai dan pastikan jadi angka desimal
+            const res = await fetch(API_URL);
+            const data = await res.json();
             document.getElementById('bal-baby').innerText = Number(data.Baby.balance).toFixed(2);
             document.getElementById('bal-daddy').innerText = Number(data.Daddy.balance).toFixed(2);
-            document.getElementById('status').innerText = "Vault Synchronized ✅";
-        } catch (err) {
-            console.log("Sync Error:", err);
-            document.getElementById('status').innerText = "Connecting... ⚠️";
-        }
+            document.getElementById('status').innerText = "All clear! ✅";
+        } catch(e) { document.getElementById('status').innerText = "Connecting... ⏳"; }
     }
 
-    async function doDeposit(user) {
-        document.getElementById('status').innerText = "Processing Deposit...";
-        try {
-            // Menggunakan URLSearchParams agar parameter terkirim dengan benar
-            await fetch(API_URL + "?user=" + user, { 
-                method: 'POST',
-                mode: 'no-cors' 
-            });
-            
-            // Tunggu sebentar lalu update layar
-            setTimeout(refreshData, 1500);
-        } catch (err) {
-            alert("Failed to send 💋");
-        }
+    async function transact(user, action) {
+        const sound = (action === 'deposit') ? 'soundKiss' : 'soundPay';
+        document.getElementById(sound).play();
+        document.getElementById('status').innerText = "Processing...";
+        
+        await fetch(${API_URL}?user=${user}&action=${action}, { method: 'POST', mode: 'no-cors' });
+        setTimeout(sync, 1500);
     }
 </script>
-
 </body>
 </html>
