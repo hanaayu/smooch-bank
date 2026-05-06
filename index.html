@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smooch Bank 💋</title>
+    <style>
+        :root { --baby-pink: #ff85a2; --daddy-blue: #4dabf7; }
+        body { font-family: 'Poppins', sans-serif; background: #fdf2f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .bank-vault { background: white; padding: 25px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        h1 { color: #ff4d94; font-size: 1.5rem; margin-bottom: 5px; }
+        .interest-tag { font-size: 0.7rem; color: #40c057; font-weight: bold; background: #ebfbee; padding: 4px 8px; border-radius: 10px; }
+        
+        .user-card { margin: 20px 0; padding: 15px; border-radius: 20px; border: 2px solid #f1f3f5; transition: 0.3s; }
+        .baby-border { border-color: var(--baby-pink); }
+        .daddy-border { border-color: var(--daddy-blue); }
+        
+        .user-name { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .balance-val { font-size: 2.2rem; font-weight: 800; display: block; color: #343a40; }
+        
+        button { border: none; padding: 12px; border-radius: 15px; width: 100%; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; margin-top: 10px; }
+        .btn-baby { background: var(--baby-pink); box-shadow: 0 4px 10px rgba(255, 133, 162, 0.3); }
+        .btn-daddy { background: var(--daddy-blue); box-shadow: 0 4px 10px rgba(77, 171, 247, 0.3); }
+        button:active { transform: scale(0.98); }
+        
+        #status { font-size: 0.75rem; color: #adb5bd; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div id="auth" style="text-align: center;">
+    <button onclick="login()" style="background:#ff4d94; width: auto;">Open Vault 🔐</button>
+</div>
+
+<div id="main-app" class="bank-vault" style="display:none;">
+    <h1>KISSING BANK 💋</h1>
+    <span class="interest-tag">Daily Interest: 0.11%</span>
+
+    <!-- Baby's Account -->
+    <div class="user-card baby-border">
+        <div class="user-name" style="color: var(--baby-pink);">Baby's Account</div>
+        <span class="balance-val" id="bal-baby">0</span>
+        <button class="btn-baby" onclick="deposit('Baby')">Deposit Kiss 💋</button>
+    </div>
+
+    <!-- Daddy's Account -->
+    <div class="user-card daddy-border">
+        <div class="user-name" style="color: var(--daddy-blue);">Daddy's Account</div>
+        <span class="balance-val" id="bal-daddy">0</span>
+        <button class="btn-daddy" onclick="deposit('Daddy')">Deposit Kiss 💋</button>
+    </div>
+
+    <div id="status">Syncing with vault...</div>
+</div>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbw50RkxBCJ5PTk2DBZX4wI6D76hzsnSEJeUxLh0nwk9C0thjOw2bnxUVW28SRm87rU/exec";
+    const ACCESS_PIN = "0211";
+
+    function login() {
+        const pin = prompt("Enter Vault PIN:");
+        if (pin === ACCESS_PIN) {
+            document.getElementById('auth').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            syncData();
+            setInterval(syncData, 5000);
+        } else { alert("Wrong PIN!"); }
+    }
+
+    async function syncData() {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            document.getElementById('bal-baby').innerText = data.Baby.balance.toFixed(2);
+            document.getElementById('bal-daddy').innerText = data.Daddy.balance.toFixed(2);
+            document.getElementById('status').innerText = "All accounts secured ✅";
+        } catch (e) { document.getElementById('status').innerText = "Connection lost... ⚠️"; }
+    }
+
+    async function deposit(user) {
+        document.getElementById('status').innerText = Sending kiss to ${user}...;
+        await fetch(${API_URL}?user=${user}, { method: 'POST', mode: 'no-cors' });
+        setTimeout(syncData, 1000);
+    }
+</script>
+</body>
+</html>
