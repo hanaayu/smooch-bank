@@ -64,8 +64,8 @@
     <div id="status">Secure connection active...</div>
 </div>
 
-<audio id="soundKiss"><source src="https://kiss.wav"></audio>
-<audio id="soundPay"><source src="https://bell.wav"></audio>
+<audio id="soundKiss"><source src="kiss.wav"></audio>
+<audio id="soundPay"><source src="bell.wav"></audio>
 
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwEiOrfNgKVRun895FhC7-Q0z4yqwzDB8FFN2bIegTdp0npG0sAYcA2VT9ghkJyvceh/exec";
@@ -96,7 +96,7 @@
         document.getElementById(sound).play();
         document.getElementById('status').innerText = "Processing...";
         
-        await fetch(${API_URL}?user=${user}&action=${action}, { method: 'POST', mode: 'no-cors' });
+        await fetch(`${API_URL}?user=${user}&action=${action}`, { method: 'POST', mode: 'no-cors' });
         setTimeout(sync, 1500);
     }
 </script>
